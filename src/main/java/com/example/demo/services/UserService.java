@@ -98,7 +98,7 @@ public class UserService {
 //           var products = productRepository.findAll();
 //           products.forEach(user::addFavoriteProduct);
 //           userRepository.save(user);
-//        productRepository.deleteById(4L);
+           productRepository.deleteById(4L);
 
     }
 }
