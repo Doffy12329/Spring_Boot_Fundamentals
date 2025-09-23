@@ -18,7 +18,7 @@ public class Demo3Application {
         //IOC OR INVERSION OF CONTROL
        ApplicationContext context = SpringApplication.run(Demo3Application.class, args);
        var service = context.getBean(UserService.class);
-        service.manageProducts();
+       service.fetchProducts();
 
 
 

@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 
+import com.example.demo.entities.Category;
 import com.example.demo.entities.User;
 import com.example.demo.repositories.*;
 import jakarta.persistence.EntityManager;
@@ -8,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 
 
 @Service
@@ -99,6 +101,15 @@ public class UserService {
 //           products.forEach(user::addFavoriteProduct);
 //           userRepository.save(user);
            productRepository.deleteById(4L);
+
+    }
+    @Transactional
+    public void updateProductPrices(){
+        productRepository.updatePriceByCategory(BigDecimal.valueOf(10),(byte)1);
+    }
+    public void fetchProducts(){
+       var products = productRepository.findByCategory( new Category((byte)1));
+       products.forEach(System.out::println);
 
     }
 }
