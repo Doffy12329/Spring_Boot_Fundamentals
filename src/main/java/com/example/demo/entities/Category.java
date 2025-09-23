@@ -32,6 +32,10 @@ public class Category {
         this.name = name;
     }
 
+    public Category(byte id) {
+        this.id=id;
+    }
+
 
     // Stores all products in this category (avoids duplicates with Set)
     // LinkedHashSet keeps insertion order
