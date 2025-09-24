@@ -14,13 +14,12 @@ import java.math.BigDecimal;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class    UserService {
     private final UserRepository userRepository;
     private final EntityManager entityManager;
     private final ProfileRepository profileRepository;
     private final AddressRepository addressRepository;
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
     @Transactional
     public void showEntityStates(){
         var user = User.builder()
@@ -111,5 +110,14 @@ public class UserService {
        var products = productRepository.findByCategory( new Category((byte)1));
        products.forEach(System.out::println);
 
+
+    }
+    @Transactional
+    public void fetchUsers(){
+       var users = userRepository.findAllWithAddresses();
+       users.forEach( u-> {
+           System.out.println(u);
+           u.getAddresses().forEach(System.out::println);
+       });
     }
 }

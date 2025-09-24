@@ -1,5 +1,7 @@
 package com.example.demo.repositories;
 
+import com.example.demo.dtos.ProductSummary;
+import com.example.demo.dtos.ProductSummaryDTO;
 import com.example.demo.entities.Category;
 import com.example.demo.entities.Product;
 import org.springframework.data.jpa.repository.Modifying;
@@ -47,22 +49,16 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     //Using SQL
 // Finds all products that belong to a category and have a price within the given range (min to max)
     @Query("select p from Product p join p.category where p.price between :min and :max")
-    List<Product> findProducts(
-            @Param("min") BigDecimal min,   // @Param("min") → fills the :min in the query
-            @Param("max") BigDecimal max);  // @Param("max") → fills the :max in the query
+    List<Product> findProducts(@Param("min") BigDecimal min, @Param("max") BigDecimal max);
 
-    // Counts how many products are within the given price range (min to max)
-    @Query("select count(*) from Product p where p.price between :min and :max")
-    long countProducts(
-            @Param("min") BigDecimal min,   // @Param("min") → fills the :min in the query
-            @Param("max") BigDecimal max);  // @Param("max") → fills the :max in the query
+    @Query("select count (*) from Product p where p.price between :min and :max")
+    long countProducts(@Param("min") BigDecimal min, @Param("max") BigDecimal max);
 
-    // Updates the price of all products that belong to a specific category
     @Modifying
     @Query("update Product p set p.price = :newPrice where p.category.id = :categoryId")
-    void updatePriceByCategory(
-            @Param("newPrice") BigDecimal newPrice, // @Param("newPrice") → fills the :newPrice in the query
-            @Param("categoryId") Byte categoryId);  // @Param("categoryId") → fills the :categoryId in the query
+    void updatePriceByCategory(BigDecimal newPrice, Byte categoryId);
 
-    List<Product> findByCategory(Category category);
+    @Query("select new com.example.demo.dtos.ProductSummaryDTO(p.id,p.name)    from Product p where p.category = :category")
+    List<ProductSummaryDTO> findByCategory(@Param("category") Category category);
+
 }
