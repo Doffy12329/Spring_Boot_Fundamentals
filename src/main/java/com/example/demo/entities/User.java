@@ -1,7 +1,8 @@
 package com.example.demo.entities; // package name
 
-import jakarta.persistence.*; // JPA annotations
-import lombok.*; // Lombok annotations
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -64,8 +65,8 @@ public class User {
     @Builder.Default // ensures builder initializes this field
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
-    private Profile profile;
+//    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+//    private Profile profile;
 
     @ManyToMany
     @JoinTable
@@ -84,4 +85,11 @@ public class User {
 
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "name = " + name + ", " +
+                "email = " + email + ")";
+    }
 }
