@@ -1,7 +1,6 @@
 package com.example.demo.services;
 
 
-import com.example.demo.entities.Category;
 import com.example.demo.entities.User;
 import com.example.demo.repositories.*;
 import jakarta.persistence.EntityManager;
@@ -106,8 +105,9 @@ public class    UserService {
     public void updateProductPrices(){
         productRepository.updatePriceByCategory(BigDecimal.valueOf(10),(byte)1);
     }
+    @Transactional
     public void fetchProducts(){
-       var products = productRepository.findByCategory( new Category((byte)1));
+       var products = productRepository.findProducts(BigDecimal.valueOf(1),BigDecimal.valueOf(15));
        products.forEach(System.out::println);
 
 
@@ -119,5 +119,12 @@ public class    UserService {
            System.out.println(u);
            u.getAddresses().forEach(System.out::println);
        });
+    }
+    @Transactional
+    public void loyaltyProfiles(){
+        var user = userRepository.findLoyalUsers(1);
+        user.forEach( p-> System.out.println(p.getId()+ p.getId()+" :" +p.getEmail()));
+
+
     }
 }
