@@ -65,8 +65,8 @@ public class User {
     @Builder.Default // ensures builder initializes this field
     private Set<Tag> tags = new HashSet<>();
 
-//    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
-//    private Profile profile;
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Profile profile;
 
     @ManyToMany
     @JoinTable

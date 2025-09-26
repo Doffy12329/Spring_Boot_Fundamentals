@@ -26,7 +26,7 @@ public class Profile {
     private String date_of_birth;  // Date of birth (better as LocalDate in real apps)
 
     @Column(name = "loyalty_points")
-    private Integer loyalty_points;  // Loyalty points (integer)
+    private Integer loyaltyPoints;  // Loyalty points (integer)
 
     @OneToOne(fetch = FetchType.LAZY)             // One User ↔ One Profile
     @JoinColumn(name = "id")
