@@ -1,11 +1,15 @@
 package com.example.demo.services;
 
 
+import com.example.demo.entities.Product;
 import com.example.demo.entities.User;
 import com.example.demo.repositories.*;
+import com.example.demo.repositories.specifications.ProductSpec;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +23,7 @@ public class    UserService {
     private final ProfileRepository profileRepository;
     private final AddressRepository addressRepository;
     private final ProductRepository productRepository;
+
     @Transactional
     public void showEntityStates(){
         var user = User.builder()
@@ -107,11 +112,46 @@ public class    UserService {
     }
     @Transactional
     public void fetchProducts(){
-       var products = productRepository.findProducts(BigDecimal.valueOf(1),BigDecimal.valueOf(15));
+       var product = new Product();
+       product.setName("product");
+
+        var matcher = ExampleMatcher.matching()
+
+                .withIncludeNullValues()
+                .withIgnorePaths("id","description")
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        var example = Example.of(product, matcher);
+
+       var products = productRepository.findAll(example);
        products.forEach(System.out::println);
 
 
+
     }
+
+
+    public void fetchProductsByCriteria(){
+        var products = productRepository.findProductsByCriteria("Name", BigDecimal.valueOf(1), null);
+        products.forEach(System.out::println);
+    }
+    
+    public void fetchProductsBySpecifications(String name, BigDecimal minPrice, BigDecimal maxPrice){
+        Specification<Product> spec = Specification.where(null);
+
+        if(name != null) {
+            spec = spec.and(ProductSpec.hasName(name));
+        }
+        if(minPrice != null) {
+            spec = spec.and(ProductSpec.hasPriceLessGreaterThanEqualTo(minPrice));
+        }
+        if(maxPrice != null) {
+            spec = spec.and(ProductSpec.hasPriceLessThanOrEqualTo(maxPrice));
+        }
+        productRepository.findAll(spec).forEach(System.out::println);
+
+    }
+    
     @Transactional
     public void fetchUsers(){
        var users = userRepository.findAllWithAddresses();
@@ -120,6 +160,30 @@ public class    UserService {
            u.getAddresses().forEach(System.out::println);
        });
     }
+
+    public void fetchSortedProducts(){
+       var sort = Sort.by("name").and(
+                Sort.by("price").descending()
+        );
+       productRepository.findAll(sort).forEach(System.out::println);
+
+    }
+
+    public void fetchPaginatedProducts(int pageNumber, int size){
+        PageRequest pageRequest = PageRequest.of(pageNumber,size);
+        Page<Product> page = productRepository.findAll(pageRequest);
+
+        var products = page.getContent();
+        products .forEach(System.out::println);
+
+        var totalPages = page.getTotalPages();
+        var totalElements = page.getTotalElements();
+
+        System.out.println("Total elements: " + totalElements);
+        System.out.println("Total pages: " + totalPages);
+    }
+
+
     @Transactional
     public void loyaltyProfiles(){
         var user = userRepository.findLoyalUsers(1);
@@ -127,4 +191,5 @@ public class    UserService {
 
 
     }
+    
 }

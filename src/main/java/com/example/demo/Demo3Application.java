@@ -6,6 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
+import java.math.BigDecimal;
+
 @SpringBootApplication
 public class Demo3Application {
 
@@ -14,7 +16,7 @@ public class Demo3Application {
         //IOC OR INVERSION OF CONTROL
        ApplicationContext context = SpringApplication.run(Demo3Application.class, args);
        var service = context.getBean(UserService.class);
-       service.loyaltyProfiles();
+       service.fetchPaginatedProducts(0,10);
 
 
 
