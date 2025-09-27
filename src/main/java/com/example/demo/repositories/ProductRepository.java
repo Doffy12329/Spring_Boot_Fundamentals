@@ -4,6 +4,8 @@ import com.example.demo.dtos.ProductSummary;
 import com.example.demo.dtos.ProductSummaryDTO;
 import com.example.demo.entities.Category;
 import com.example.demo.entities.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -13,7 +15,7 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface ProductRepository extends CrudRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductCriteriaRepository, JpaSpecificationExecutor<Product> {
     //Derived   Query Methods
     //String Conventions
     List<Product> findByName(String name);
